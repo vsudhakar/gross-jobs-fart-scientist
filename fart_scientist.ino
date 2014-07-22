@@ -1,0 +1,155 @@
+//Fart Scientist
+
+//Variables
+int fartSounds|| = {}; //Arduino will select a random track number from this array
+int excuseSounds|| = {}; //Arduino will select a random track number from this array
+int digestionSound;
+int alarmSound;
+int gulpSound;
+
+unsigned long prevTime;
+unsigned long intervalTime;
+unsigned long currentTime;
+int counterTick;
+boolean flagNewTick;
+
+boolean smallBallDetected;
+boolean largeBallDetected;
+
+boolean threeTick;
+
+int smallSensorValue = 0;
+int largeSensorValue = 0;
+
+int esoLED = 12;
+int stoLED = 9;
+int sIntLED = 15;
+int lIntLED = 12;
+
+boolean eso;
+boolean sto;
+boolean sInt;
+boolean lInt;
+
+int detectionThreshold; //Value that sensor output needs to fall below to trigger the ball detection flag
+
+//Pins
+
+const int smallBallDetector;
+const int largeBallDetector;
+
+void setup(){
+  
+  //Time setup
+  prevTime = millis();
+  intervalTime = 125;
+  counterTick = 0;
+  
+  //Variable setup
+  threeTick = false;
+  smallBallDetected = false;
+  largeBallDetected = false;
+  
+  eso = false;
+  sto = false;
+  sInt = false;
+  lInt = false;
+  
+  //Pinmode setup
+  
+  
+  //Serial setup
+  Serial.begin(9600);
+}
+
+void loop(){
+  //Detect Balls
+  
+  if(!smallBallDetected && !largeBallDetected){
+    smallSensorValue = analogRead(smallBallDetector);
+    largeSensorValue = analogRead(largeBallDetector);
+  }
+  
+  if(smallSensorValue < detectionThreshold){  //Small Ball conditional
+    smallBallDetected = true;
+    largeBallDetected = false;
+  }
+  
+  if(largeSensor < detectionThreshold && !smallBallDetected){  //Large Ball conditional, only runs if the small ball has not been detected yet (safety mechanism)
+    smallBallDetected = false;
+    largeBallDetected = true;
+  }
+  
+  if(smallBallDetected || largeBallDetected){
+    currentTime = millis();
+    flagNewTick = false;
+  
+    if(currentTime - prevTime >= intervalTime)
+    {
+      counterTick++;
+      threeTick = false;
+      prevTime = currentTime;
+      flagNewTick = true;
+    }
+    
+    // This part of the program will run for both types of balls
+    closeMouth();
+    
+    if(esoLED > 0 && !eso){   //Conditional to make sure all the LEDs are not complete, flag is just a precaution
+      runEso(); //Runs immediately after ball is dropped and mouth closed
+    }else{
+      eso = true;
+    }
+    
+    if(counterTick == 8){
+      
+    }
+    
+    if(smallBallDetected){
+      //Small ball sequence
+    }else{
+      //Large ball sequence
+    }
+  }
+ 
+}
+
+//MP3 Shield Transient Noise Reducing Script
+
+void killTrans(){
+  //Procedure goes here - detailed in the Line Out PDF on Sparkfun
+}
+
+
+//Subroutines - Blank for now
+
+void closeMouth(){
+  
+}
+
+void runEso(){
+  /* Code goes here
+     use the variable esoLED to find out how many LEDs are left to activate
+  */
+  
+  /* Code ends here */
+  
+  esoLED--;
+}
+
+void playSound(int file){
+  killTrans();   //Required before every MP3 sound
+  
+  /* Sound playing code goes here */
+  
+  /* Code ends here */
+  
+}
+
+void playRandomSound(char type){  //Type: d - digestive sounds, f - fart sounds
+  if(type == 'd'){
+    //Select and play random sound from array
+  }else if(type == 'f'){
+    //select and play random sound from array
+  }
+}
