@@ -31,6 +31,8 @@ boolean sto;
 boolean sInt;
 boolean lInt;
 
+boolean gulpFlag;
+
 int detectionThreshold; //Value that sensor output needs to fall below to trigger the ball detection flag
 
 //Pins
@@ -54,6 +56,8 @@ void setup(){
   sto = false;
   sInt = false;
   lInt = false;
+  
+  gulpFlag = false;
   
   //Pinmode setup
   
@@ -101,14 +105,41 @@ void loop(){
       eso = true;
     }
     
-    if(counterTick == 8){
-      
+    if(counterTick == 8 && !gulpFlag){
+      //Play gulp sound
+      playSound(gulpSound);
+      gulpFlag = true;
     }
     
+    if(counterTick == 24){
+      //Digestion MP3
+      playSound(digestionSound);
+      
+      //Stomach LEDs
+      sto = true;
+    }
+    
+    if(sto){
+      //Currently the Stomach LED string is being run
+      runSto();
+      
+      if(stoLED > 0){
+        sto = false;
+      }
+    }
+    
+    //This is where the program breaks into two
+    
     if(smallBallDetected){
-      //Small ball sequence
+      //Small ball sequence -> Fart
+      if(counterTick == 51){
+        //Small Intestine LEDs
+      }
+      
     }else{
-      //Large ball sequence
+      //Large ball sequence -> Non Fart
+      
+      
     }
   }
  
@@ -137,6 +168,20 @@ void runEso(){
   esoLED--;
 }
 
+void runSto(){
+  /* Code goes here
+  use the variable stoLED to find out how many LEDs are left to activate*/
+  
+  stoLED--;
+}
+
+void runSInt(){
+  /* Code goes here
+  use the variable stoLED to find out how many LEDs are left to activate*/
+  
+  sIntLED--;
+}
+
 void playSound(int file){
   killTrans();   //Required before every MP3 sound
   
@@ -147,6 +192,8 @@ void playSound(int file){
 }
 
 void playRandomSound(char type){  //Type: d - digestive sounds, f - fart sounds
+  killTrans();
+  
   if(type == 'd'){
     //Select and play random sound from array
   }else if(type == 'f'){
