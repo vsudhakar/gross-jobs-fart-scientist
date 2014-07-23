@@ -123,7 +123,7 @@ void loop(){
       //Currently the Stomach LED string is being run
       runSto();
       
-      if(stoLED > 0){
+      if(stoLED == 0){
         sto = false;
       }
     }
@@ -132,10 +132,54 @@ void loop(){
     
     if(smallBallDetected){
       //Small ball sequence -> Fart
+      
       if(counterTick == 51){
         //Small Intestine LEDs
+        sInt = true;
+      }
+      if(sInt){
+        runSInt();
+        if(sIntLED == 0){
+          sInt = false;
+        }
       }
       
+      if(counterTick == 96){
+        //Alarm MP3
+        playSound(alarmSound);
+        
+        //Turn Large Intestine Red LEDs on until 104 ticks
+        onLInt();
+      }
+      
+      if(counterTick == 104){
+        //Turn off Large Intestine Red LEDs
+        offLInt();
+      }
+      
+      if(counterTick == 132){
+        //Play a random fart sound
+        playRandomSound('f');
+        
+        //Turn the carousel
+        turnCarousel();
+      }
+      
+      if(counterTick == 136){
+        turnCarousel();
+      }
+      
+      if(counterTick == 140){
+        turnCarousel();
+      }
+      if(counterTick == 144){
+        //Play random excuse me sound
+        playRandomSound('e');
+        
+        //Reset flags so that the program starts from the beginning of the loop
+        resetFlags();
+      }
+        
     }else{
       //Large ball sequence -> Non Fart
       
@@ -182,6 +226,14 @@ void runSInt(){
   sIntLED--;
 }
 
+void onLInt(){
+  //Turn on all of the large intestine LEDs
+}
+
+void offLInt(){
+  //Turn off all of the large intestine LEDs
+}
+
 void playSound(int file){
   killTrans();   //Required before every MP3 sound
   
@@ -191,12 +243,33 @@ void playSound(int file){
   
 }
 
-void playRandomSound(char type){  //Type: d - digestive sounds, f - fart sounds
+void playRandomSound(char type){  //Type: e - excuse me sounds, f - fart sounds
   killTrans();
   
-  if(type == 'd'){
+  if(type == 'e'){
     //Select and play random sound from array
   }else if(type == 'f'){
     //select and play random sound from array
   }
+}
+
+void turnCarousel(){
+  /*Turn the carousel to drop the balls
+  Stepper motor code goes here */
+  
+  /* End Code */
+}
+
+void resetFlags(){
+  //Code to reset all flags goes here
+  threeTick = false;
+  smallBallDetected = false;
+  largeBallDetected = false;
+  
+  eso = false;
+  sto = false;
+  sInt = false;
+  lInt = false;
+  
+  gulpFlag = false;
 }
