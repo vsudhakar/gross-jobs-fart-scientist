@@ -1,8 +1,8 @@
 //Fart Scientist
 
 //Variables
-int fartSounds|| = {}; //Arduino will select a random track number from this array
-int excuseSounds|| = {}; //Arduino will select a random track number from this array
+int fartSounds[] = {}; //Arduino will select a random track number from this array
+int excuseSounds[] = {}; //Arduino will select a random track number from this array
 int digestionSound;
 int alarmSound;
 int gulpSound;
@@ -23,7 +23,8 @@ int largeSensorValue = 0;
 
 int esoLED = 12;
 int stoLED = 9;
-int sIntLED = 15;
+int sIntLEDGreen = 15;
+int sIntLEDRed = 15;
 int lIntLED = 12;
 
 boolean eso;
@@ -37,8 +38,8 @@ int detectionThreshold; //Value that sensor output needs to fall below to trigge
 
 //Pins
 
-const int smallBallDetector;
-const int largeBallDetector;
+const int smallBallDetector = 0;
+const int largeBallDetector = 0;
 
 void setup(){
   
@@ -79,7 +80,7 @@ void loop(){
     largeBallDetected = false;
   }
   
-  if(largeSensor < detectionThreshold && !smallBallDetected){  //Large Ball conditional, only runs if the small ball has not been detected yet (safety mechanism)
+  if(largeSensorValue < detectionThreshold && !smallBallDetected){  //Large Ball conditional, only runs if the small ball has not been detected yet (safety mechanism)
     smallBallDetected = false;
     largeBallDetected = true;
   }
@@ -138,8 +139,8 @@ void loop(){
         sInt = true;
       }
       if(sInt){
-        runSInt();
-        if(sIntLED == 0){
+        runSIntRed();
+        if(sIntLEDRed == 0){
           sInt = false;
         }
       }
@@ -182,7 +183,13 @@ void loop(){
         
     }else{
       //Large ball sequence -> Non Fart
-      
+      if(counterTick == 51){
+        //Play digestion sound
+        playSound(digestionSound);
+        
+        //Small Int Green LEDs
+        
+      }
       
     }
   }
@@ -219,11 +226,15 @@ void runSto(){
   stoLED--;
 }
 
-void runSInt(){
+void runSIntGreen(){
   /* Code goes here
-  use the variable stoLED to find out how many LEDs are left to activate*/
+  use the variable sIntLED to find out how many LEDs are left to activate*/
   
-  sIntLED--;
+  sIntLEDGreen--;
+}
+void runSIntRed(){
+  /* Code goes here
+  use the variable sIntLED to find out how many LEDs are left to activate*/
 }
 
 void onLInt(){
